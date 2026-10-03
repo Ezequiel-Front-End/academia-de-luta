@@ -1,0 +1,6 @@
+{
+  "name": "KNOCKOUT FIGHT GYM",
+  "description": "Academia de Boxe, MMA e Artes Marciais. Plantel de lutadores oficiais, calendário de lutas agendadas, modalidades e agendamento de aulas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
