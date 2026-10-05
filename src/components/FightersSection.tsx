@@ -103,15 +103,13 @@ export function FightersSection({ fighters, onSelectFighter, onViewScheduledFigh
                 className="group relative bg-[#121217] rounded-2xl border border-neutral-800/90 hover:border-red-500/50 transition-all duration-300 overflow-hidden flex flex-col shadow-xl hover:shadow-red-950/20"
               >
                 {/* Photo & Badge Area */}
-                <div className="relative aspect-[4/4.5] overflow-hidden bg-neutral-900">
+                <div className="relative aspect-[4/4.5] overflow-hidden bg-transparent">
                   <GymImage
                     src={fighter.photo}
                     alt={fighter.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full"
+                    imgClassName="object-contain object-bottom scale-110 translate-y-2 group-hover:scale-[1.15] transition-transform duration-500 [mask-image:linear-gradient(to_top,transparent_2%,black_35%)]"
                   />
-                  
-                  {/* Vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121217] via-[#121217]/20 to-transparent pointer-events-none" />
 
                   {/* Category Pill Tag in Top Corner */}
                   <div className="absolute top-3 left-3 z-10">

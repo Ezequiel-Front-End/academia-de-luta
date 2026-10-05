@@ -161,93 +161,95 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
                 </div>
 
                 {/* Matchup Center Stage */}
-                <div className="py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="pt-12 lg:pt-20 pb-6 flex flex-col lg:flex-row items-center lg:items-end justify-center gap-8 lg:gap-16">
                   
                   {/* Left: Knockout Gym Athlete */}
-                  <div className="lg:col-span-4 flex items-center gap-4 sm:gap-6">
-                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-red-600 shadow-xl shadow-red-600/20 shrink-0">
-                      <GymImage
-                        src={nextFight.fighterPhoto}
+                  <div className="flex flex-col items-center text-center flex-1 min-w-0 px-2">
+                    <div className="relative w-48 h-64 sm:w-64 sm:h-80 lg:w-[24rem] lg:h-[25rem] shrink-0 -mb-6 lg:-mb-12 max-w-full z-10">
+                      <img
+                        src="/modelo_lutador_kaah.png"
                         alt={nextFight.fighterName}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain object-bottom drop-shadow-2xl [mask-image:linear-gradient(to_top,transparent_3%,black_35%)] scale-x-[-1.5] scale-y-[1.5] sm:scale-x-[-1.7] sm:scale-y-[1.7] lg:scale-x-[-1.95] lg:scale-y-[1.95] translate-y-6 lg:translate-y-10 origin-bottom"
                       />
                     </div>
-                    <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-500 font-heading block">
-                        ATLETA DA CASA · KNOCKOUT GYM
+                    <div className="z-10 relative w-full break-words">
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-500 font-heading block drop-shadow-lg">
+                        ATLETA DA CASA · KNOCKOUT
                       </span>
-                      <h3 className="text-xl sm:text-2xl font-bold uppercase text-white font-heading mt-0.5">
+                      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase text-white font-heading mt-1 drop-shadow-lg leading-tight break-words">
                         {nextFight.fighterName}
                       </h3>
-                      <p className="text-xs text-red-400 font-semibold">"{nextFight.fighterNickname}"</p>
-                      <p className="text-xs text-neutral-400 font-mono mt-1">Cartel: {nextFight.fighterRecord}</p>
+                      <p className="text-xs sm:text-sm text-red-400 font-semibold drop-shadow-md mt-0.5 break-words">"{nextFight.fighterNickname}"</p>
+                      <div className="inline-block mt-2 bg-black/40 px-3 py-1 rounded-full border border-neutral-800">
+                        <p className="text-xs text-neutral-300 font-mono">Cartel: {nextFight.fighterRecord}</p>
+                      </div>
                     </div>
                   </div>
 
                   {/* Center: VS & Event Data & Live Countdown */}
-                  <div className="lg:col-span-4 text-center flex flex-col items-center space-y-4">
-                    <div className="w-14 h-14 rounded-full bg-red-600 border-2 border-white/20 flex items-center justify-center font-heading text-white font-black text-xl shadow-lg shadow-red-600/50">
-                      VS
-                    </div>
-
+                  <div className="flex flex-col items-center justify-center space-y-6 z-20 shrink-0 lg:mb-12">
                     <div className="text-center">
-                      <h4 className="text-lg font-bold uppercase text-white tracking-wide">
+                      <h4 className="text-xl sm:text-2xl font-bold uppercase text-white tracking-wide font-heading">
                         {nextFight.event}
                       </h4>
-                      <p className="text-xs text-neutral-400">
+                      <p className="text-sm text-neutral-400 mt-1">
                         {nextFight.weightClass} · {nextFight.rounds} Rounds
                       </p>
                     </div>
 
+                    <div className="w-16 h-16 rounded-full bg-red-600 border-4 border-[#0b0b0e] flex items-center justify-center font-heading text-white font-black text-2xl shadow-xl shadow-red-600/40">
+                      VS
+                    </div>
+
                     {/* Live Ticking Countdown Box */}
-                    <div className="bg-[#0b0b0e] p-3 rounded-2xl border border-neutral-800 w-full max-w-xs">
-                      <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider mb-1.5 flex items-center justify-center gap-1">
-                        <Clock className="w-3 h-3 text-red-500" />
-                        CONTAGEM REGRESSIVA PARA O COMBATE
+                    <div className="bg-[#0b0b0e] p-4 rounded-3xl border border-neutral-800 w-full min-w-[280px] shadow-2xl">
+                      <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest mb-3 flex items-center justify-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-red-500" />
+                        CONTAGEM PARA O COMBATE
                       </div>
-                      <div className="grid grid-cols-4 gap-1 text-center font-heading">
-                        <div className="bg-[#14141c] py-1.5 rounded-lg border border-neutral-800">
-                          <span className="text-xl font-bold text-white tabular-nums">{timeLeft.days}</span>
-                          <span className="block text-[9px] uppercase text-neutral-400 font-sans">Dias</span>
+                      <div className="grid grid-cols-4 gap-2 text-center font-heading">
+                        <div className="bg-[#14141c] py-2 rounded-xl border border-neutral-800/80">
+                          <span className="text-2xl font-black text-white tabular-nums block">{timeLeft.days}</span>
+                          <span className="block text-[9px] uppercase text-neutral-500 font-sans mt-0.5 font-bold">Dias</span>
                         </div>
-                        <div className="bg-[#14141c] py-1.5 rounded-lg border border-neutral-800">
-                          <span className="text-xl font-bold text-white tabular-nums">{timeLeft.hours}</span>
-                          <span className="block text-[9px] uppercase text-neutral-400 font-sans">Horas</span>
+                        <div className="bg-[#14141c] py-2 rounded-xl border border-neutral-800/80">
+                          <span className="text-2xl font-black text-white tabular-nums block">{timeLeft.hours}</span>
+                          <span className="block text-[9px] uppercase text-neutral-500 font-sans mt-0.5 font-bold">Horas</span>
                         </div>
-                        <div className="bg-[#14141c] py-1.5 rounded-lg border border-neutral-800">
-                          <span className="text-xl font-bold text-white tabular-nums">{timeLeft.minutes}</span>
-                          <span className="block text-[9px] uppercase text-neutral-400 font-sans">Min</span>
+                        <div className="bg-[#14141c] py-2 rounded-xl border border-neutral-800/80">
+                          <span className="text-2xl font-black text-white tabular-nums block">{timeLeft.minutes}</span>
+                          <span className="block text-[9px] uppercase text-neutral-500 font-sans mt-0.5 font-bold">Min</span>
                         </div>
-                        <div className="bg-[#14141c] py-1.5 rounded-lg border border-neutral-800">
-                          <span className="text-xl font-bold text-red-500 tabular-nums">{timeLeft.seconds}</span>
-                          <span className="block text-[9px] uppercase text-neutral-400 font-sans">Seg</span>
+                        <div className="bg-[#14141c] py-2 rounded-xl border border-neutral-800/80">
+                          <span className="text-2xl font-black text-red-500 tabular-nums block">{timeLeft.seconds}</span>
+                          <span className="block text-[9px] uppercase text-red-500/70 font-sans mt-0.5 font-bold">Seg</span>
                         </div>
                       </div>
                     </div>
-
                   </div>
 
                   {/* Right: Opponent */}
-                  <div className="lg:col-span-4 flex items-center justify-start lg:justify-end gap-4 sm:gap-6 flex-row-reverse lg:flex-row text-left lg:text-right">
-                    <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-neutral-400 block">
+                  <div className="flex flex-col items-center text-center flex-1 min-w-0 px-2">
+                    <div className="relative w-48 h-64 sm:w-64 sm:h-80 lg:w-[22rem] lg:h-[25rem] shrink-0 -mb-6 lg:-mb-12 max-w-full z-10">
+                      <img
+                        src={nextFight.opponentPhoto}
+                        alt={nextFight.opponentName}
+                        className="w-full h-full object-contain object-bottom drop-shadow-2xl [mask-image:linear-gradient(to_top,transparent_3%,black_35%)] -scale-x-100 scale-[1.2] sm:scale-[1.3] lg:scale-[1.4] translate-y-6 lg:translate-y-10 origin-bottom"
+                      />
+                    </div>
+                    <div className="z-10 relative w-full break-words">
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-neutral-400 block drop-shadow-lg">
                         OPONENTE DESAFIANTE
                       </span>
-                      <h3 className="text-xl sm:text-2xl font-bold uppercase text-white font-heading mt-0.5">
+                      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase text-white font-heading mt-1 drop-shadow-lg leading-tight break-words">
                         {nextFight.opponentName}
                       </h3>
                       {nextFight.opponentNickname && (
-                        <p className="text-xs text-neutral-300 font-semibold">"{nextFight.opponentNickname}"</p>
+                        <p className="text-xs sm:text-sm text-neutral-400 font-semibold drop-shadow-md mt-0.5 break-words">"{nextFight.opponentNickname}"</p>
                       )}
-                      <p className="text-xs text-neutral-400 font-mono mt-1">Cartel: {nextFight.opponentRecord}</p>
-                      <p className="text-[11px] text-neutral-500 mt-0.5">{nextFight.opponentTeam}</p>
-                    </div>
-                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-neutral-700 shadow-xl shrink-0">
-                      <GymImage
-                        src={nextFight.opponentPhoto}
-                        alt={nextFight.opponentName}
-                        className="w-full h-full object-cover"
-                      />
+                      <div className="inline-block mt-2 bg-black/40 px-3 py-1 rounded-full border border-neutral-800">
+                        <p className="text-xs text-neutral-300 font-mono">Cartel: {nextFight.opponentRecord}</p>
+                      </div>
                     </div>
                   </div>
 

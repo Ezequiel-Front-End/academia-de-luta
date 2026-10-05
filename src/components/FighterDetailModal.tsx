@@ -46,13 +46,25 @@ export function FighterDetailModal({ fighter, onClose, onViewScheduledFight }: F
           {/* Top Hero Info */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             
-            {/* Fighter Photo */}
-            <div className="md:col-span-5 relative rounded-xl overflow-hidden border border-neutral-800 aspect-[3/4]">
-              <GymImage
-                src={fighter.photo}
-                alt={fighter.name}
-                className="w-full h-full object-cover"
-              />
+            {/* Fighter Photo or Video */}
+            <div className="md:col-span-5 relative rounded-xl overflow-hidden border border-neutral-800 aspect-[3/4] bg-transparent flex items-center justify-center">
+              {fighter.id === 'kauany-kaah' ? (
+                <video
+                  src="/kauany_apresentacao_video.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <GymImage
+                  src={fighter.photo}
+                  alt={fighter.name}
+                  className="w-full h-full"
+                  imgClassName="object-contain object-bottom scale-110 translate-y-3"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
               
               <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">

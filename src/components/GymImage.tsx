@@ -5,11 +5,12 @@ interface GymImageProps {
   src: string;
   alt: string;
   className?: string;
+  imgClassName?: string;
   aspectRatio?: string;
   badge?: string;
 }
 
-export function GymImage({ src, alt, className = '', badge }: GymImageProps) {
+export function GymImage({ src, alt, className = '', imgClassName = 'object-cover', badge }: GymImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -23,7 +24,7 @@ export function GymImage({ src, alt, className = '', badge }: GymImageProps) {
           loading="lazy"
           onLoad={() => setIsLoaded(true)}
           onError={() => setHasError(true)}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${
+          className={`w-full h-full transition-opacity duration-500 ${imgClassName} ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />

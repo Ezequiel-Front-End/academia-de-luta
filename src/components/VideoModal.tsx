@@ -34,44 +34,15 @@ export function VideoModal({ isOpen, onClose, onBookTrial }: VideoModalProps) {
         </div>
 
         {/* Video Player Display Container */}
-        <div className="relative aspect-video bg-black overflow-hidden flex items-center justify-center">
-          <GymImage
-            src="https://images.unsplash.com/photo-1549476464-37392f717541?auto=format&fit=crop&w=1200&q=80"
-            alt="Highlights de treino na Knockout Gym"
-            className="w-full h-full object-cover opacity-80"
-          />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
-
-          {/* Central Play Badge */}
-          <div className="relative z-10 text-center space-y-3 p-6 max-w-md">
-            <div className="w-16 h-16 rounded-full bg-red-600/90 border-2 border-white/40 flex items-center justify-center mx-auto text-white shadow-2xl shadow-red-600/60 animate-pulse">
-              <Play className="w-7 h-7 fill-white ml-1" />
-            </div>
-            <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-red-400 block font-heading">
-                TOUR VIRTUAL & BASTIDORES DE COMPETIÇÃO
-              </span>
-              <h3 className="text-xl sm:text-2xl font-bold uppercase text-white font-heading mt-1">
-                A Energia do Tatame Knockout
-              </h3>
-              <p className="text-xs text-neutral-300 mt-1">
-                Conheça nossos 1.200m² de estrutura, octógono com medidas do UFC, ringue profissional e a preparação dos atletas.
-              </p>
-            </div>
-          </div>
-
-          {/* Simulated Controls Bar */}
-          <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between text-xs text-white/80 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="font-mono text-[11px]">02:45 / 03:12 · 4K UHD</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Volume2 className="w-4 h-4 text-neutral-300" />
-              <span className="text-[10px] uppercase font-bold text-neutral-300">Som Ligado</span>
-            </div>
-          </div>
+        <div className="relative aspect-video bg-black overflow-hidden">
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src="https://www.youtube.com/embed/C4A7HbZYmz0?autoplay=1"
+            title="A Energia do Tatame Knockout"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
         </div>
 
         {/* Modal Footer */}

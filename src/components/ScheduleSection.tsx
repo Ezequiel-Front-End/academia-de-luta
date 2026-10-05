@@ -89,11 +89,11 @@ export function ScheduleSection({ schedule, onBookClassForTime }: ScheduleSectio
               >
                 {/* Time & Program */}
                 <div className="flex items-start sm:items-center gap-4">
-                  <div className="w-20 shrink-0 text-center bg-[#0d0d12] py-2 px-1 rounded-lg border border-neutral-800">
-                    <span className="text-xs font-bold text-red-500 tabular-nums font-mono block">
+                  <div className="w-28 shrink-0 text-center bg-[#0d0d12] py-2 px-2 rounded-lg border border-neutral-800">
+                    <span className="text-lg font-bold text-red-500 tabular-nums font-mono block">
                       {item.time.split(' - ')[0]}
                     </span>
-                    <span className="text-[10px] text-neutral-500 font-mono block">
+                    <span className="text-xs text-neutral-500 font-mono block mt-1">
                       até {item.time.split(' - ')[1]}
                     </span>
                   </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Award, Users, Trophy, Shield, ArrowRight, X, HeartHandshake } from 'lucide-react';
 import { GymImage } from './GymImage';
+import { AnimatedCounter } from './AnimatedCounter';
 
 interface AboutSectionProps {
   onTourGym: () => void;
@@ -47,21 +48,12 @@ export function AboutSection({ onTourGym }: AboutSectionProps) {
             {/* Left: Gritty Boxing Ring Photography */}
             <div className="lg:col-span-6 relative rounded-2xl overflow-hidden border border-neutral-800 aspect-[16/11] shadow-2xl">
               <GymImage
-                src="https://images.unsplash.com/photo-1549476464-37392f717541?auto=format&fit=crop&w=1000&q=80"
-                alt="Ringue de boxe oficial e estrutura da Knockout Gym"
+                src="/alunos.jpeg"
+                alt="Alunos da Knockout Gym em treinamento"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-              {/* Tag overlay */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
-                <span className="px-3 py-1 bg-black/80 backdrop-blur-md border border-neutral-700 text-neutral-300 font-bold uppercase tracking-wider rounded">
-                  ESTRUTURA DE 1.200 M²
-                </span>
-                <span className="text-red-400 font-bold uppercase tracking-wider">
-                  SÃO PAULO · SP
-                </span>
-              </div>
             </div>
 
             {/* Right: Narrative & Stats */}
@@ -97,7 +89,7 @@ export function AboutSection({ onTourGym }: AboutSectionProps) {
                         <Icon className="w-4 h-4" />
                       </div>
                       <div className="text-xl sm:text-2xl font-black text-white font-heading tabular-nums">
-                        {stat.value}
+                        <AnimatedCounter value={stat.value} />
                       </div>
                       <div className="text-[10px] uppercase font-bold text-neutral-400 leading-tight">
                         {stat.label}
