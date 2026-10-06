@@ -57,6 +57,24 @@ export function FighterDetailModal({ fighter, onClose, onViewScheduledFight }: F
                   playsInline
                   className="w-full h-full object-cover"
                 />
+              ) : fighter.id === 'gabriel-gaah' ? (
+                <video
+                  src="/gabriel_apresentacao.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              ) : fighter.id === 'ricardo-ricardinho' ? (
+                <video
+                  src="/ricardo_apresentacao.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <GymImage
                   src={fighter.photo}
