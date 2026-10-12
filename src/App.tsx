@@ -10,6 +10,9 @@ import { ScheduleSection } from './components/ScheduleSection';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { FederationsSection } from './components/FederationsSection';
+import { PartnersSection } from './components/PartnersSection';
+import { HistoryScreen } from './components/HistoryScreen';
 import { FighterDetailModal } from './components/FighterDetailModal';
 import { FightDetailModal } from './components/FightDetailModal';
 import { VideoModal } from './components/VideoModal';
@@ -31,6 +34,7 @@ export default function App() {
   const [selectedFight, setSelectedFight] = useState<ScheduledFight | null>(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('inicio');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'history'>('home');
 
   // Contact form pre-fill state
   const [contactProgram, setContactProgram] = useState<string>('');
@@ -88,14 +92,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#08080a] text-neutral-100 flex flex-col font-sans selection:bg-red-600 selection:text-white">
 
-      {/* Main Top Navigation Header */}
       <Navbar
         activeSection={activeNav}
         onOpenBooking={scrollToContact}
       />
 
-      <main className="flex-1">
-        {/* Hero Section matching the user's reference design */}
+      {currentScreen === 'home' ? (
+        <main className="flex-1">
+          {/* Hero Section matching the user's reference design */}
         <HeroSection
           onStartJourney={handleStartJourney}
           onWatchVideo={() => setIsVideoModalOpen(true)}
@@ -131,7 +135,21 @@ export default function App() {
         <RevealOnScroll>
           <AboutSection
             onTourGym={() => setIsVideoModalOpen(true)}
+            onViewHistory={() => {
+              setCurrentScreen('history');
+              window.scrollTo(0, 0);
+            }}
           />
+        </RevealOnScroll>
+
+        {/* Federations and Confederations */}
+        <RevealOnScroll>
+          <FederationsSection />
+        </RevealOnScroll>
+
+        {/* Partners and Sponsors */}
+        <RevealOnScroll>
+          <PartnersSection />
         </RevealOnScroll>
 
         {/* Interactive Weekly Class Schedule */}
@@ -157,7 +175,18 @@ export default function App() {
             cheerFighterName={cheerFighterName}
           />
         </RevealOnScroll>
-      </main>
+        </main>
+      ) : (
+        <main className="flex-1">
+          <HistoryScreen onBack={() => {
+            setCurrentScreen('home');
+            setTimeout(() => {
+              const el = document.getElementById('sobre');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }} />
+        </main>
+      )}
 
       {/* Footer */}
       <Footer />
@@ -201,7 +230,7 @@ export default function App() {
       {/* Floating Action Button: Quick WhatsApp Direct Access */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
         <a
-          href={`https://wa.me/${GYM_INFO.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre as aulas e planos da Knockout Fight Gym!')}`}
+          href={`https://wa.me/${GYM_INFO.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre as aulas e planos da BBT!')}`}
           target="_blank"
           rel="noopener noreferrer"
           className="w-13 h-13 rounded-full bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white flex items-center justify-center shadow-xl shadow-emerald-950/60 transition-all hover:scale-105 group"

@@ -103,7 +103,7 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
             LUTAS AGENDADAS DA ACADEMIA
           </h2>
           <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
-            Confira as datas, cards e transmissões oficiais dos nossos atletas que sobem ao ringue e ao octógono em nome da Knockout Fight Gym.
+            Confira as datas, cards e transmissões oficiais dos nossos atletas que sobem ao ringue e ao octógono em nome da BBT.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
                 {/* Matchup Center Stage */}
                 <div className="pt-12 lg:pt-20 pb-6 flex flex-col lg:flex-row items-center lg:items-end justify-center gap-8 lg:gap-16">
                   
-                  {/* Left: Knockout Gym Athlete */}
+                  {/* Left: BBT Athlete */}
                   <div className="flex flex-col items-center text-center flex-1 min-w-0 px-2">
                     <div className="relative w-48 h-64 sm:w-64 sm:h-80 lg:w-[24rem] lg:h-[25rem] shrink-0 -mb-6 lg:-mb-12 max-w-full z-10">
                       <img
@@ -174,7 +174,7 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
                     </div>
                     <div className="z-10 relative w-full break-words">
                       <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-500 font-heading block drop-shadow-lg">
-                        ATLETA DA CASA · KNOCKOUT
+                        ATLETA DA CASA · BBT
                       </span>
                       <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase text-white font-heading mt-1 drop-shadow-lg leading-tight break-words">
                         {nextFight.fighterName}
@@ -336,7 +336,7 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
 
                       {/* Matchup Duel */}
                       <div className="mt-4 flex items-center justify-between gap-3 bg-[#0d0d12] p-3 rounded-xl border border-neutral-800/80">
-                        {/* Knockout Fighter */}
+                        {/* BBT Fighter */}
                         <div className="flex items-center gap-2.5">
                           <div className="w-12 h-12 rounded-xl overflow-hidden border border-red-500/60 shrink-0">
                             <GymImage
@@ -346,7 +346,7 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
                             />
                           </div>
                           <div>
-                            <span className="text-[9px] uppercase font-bold text-red-500 block">KNOCKOUT</span>
+                            <span className="text-[9px] uppercase font-bold text-red-500 block">BBT</span>
                             <span className="text-xs font-bold text-white block leading-tight">{fight.fighterName}</span>
                             <span className="text-[10px] text-neutral-400">"{fight.fighterNickname}"</span>
                           </div>

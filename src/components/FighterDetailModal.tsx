@@ -28,7 +28,7 @@ export function FighterDetailModal({ fighter, onClose, onViewScheduledFight }: F
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-red-600" />
             <span className="text-xs uppercase tracking-widest text-neutral-400 font-bold">
-              PLANTEL OFICIAL · KNOCKOUT FIGHT TEAM
+              PLANTEL OFICIAL · BBT TEAM
             </span>
           </div>
           <button
@@ -223,7 +223,7 @@ export function FighterDetailModal({ fighter, onClose, onViewScheduledFight }: F
           <div className="space-y-2">
             <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-300 flex items-center gap-2">
               <Trophy className="w-4 h-4 text-amber-400" />
-              Títulos e Conquistas pela Knockout Gym
+              Títulos e Conquistas pela BBT
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {fighter.achievements.map((item, i) => (

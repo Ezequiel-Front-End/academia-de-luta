@@ -28,10 +28,10 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-heading text-xl font-bold tracking-wider text-white leading-none">
-                  KNOCKOUT
+                  BBT
                 </span>
                 <span className="text-[9px] uppercase font-bold tracking-[0.25em] text-red-500 leading-tight">
-                  FIGHT GYM
+                  BRAZILIAN BLACK THAI
                 </span>
               </div>
             </div>
@@ -169,7 +169,7 @@ export function Footer() {
 
         {/* Bottom Copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-400">
-          <p>© 2026 Knockout Fight Gym. Todos os direitos reservados.</p>
+          <p>© 2026 BBT. Todos os direitos reservados.</p>
           <div className="flex items-center gap-6 text-neutral-400">
             <a href="#contato" className="hover:text-white transition-colors">Termos de Uso</a>
             <a href="#contato" className="hover:text-white transition-colors">Política de Privacidade</a>

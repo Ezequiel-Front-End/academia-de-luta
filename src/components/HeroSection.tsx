@@ -67,7 +67,7 @@ export function HeroSection({ onStartJourney, onWatchVideo }: HeroSectionProps) 
 
             {/* Description */}
             <p className="text-base sm:text-lg text-neutral-300 max-w-xl leading-relaxed">
-              Construa força física real, confiança inabalável e mentalidade indestrutível na Knockout Fight Gym. Forjamos guerreiros para a vida e campeões para o ringue e o octógono.
+              Construa força física real, confiança inabalável e mentalidade indestrutível na BBT. Forjamos guerreiros para a vida e campeões para o ringue e o octógono.
             </p>
 
             {/* Action Buttons */}
@@ -97,22 +97,22 @@ export function HeroSection({ onStartJourney, onWatchVideo }: HeroSectionProps) 
                 <img
                   className="inline-block h-10 w-10 rounded-full ring-2 ring-[#0a0a0d] object-cover"
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
-                  alt="Aluno Knockout"
+                  alt="Aluno BBT"
                 />
                 <img
                   className="inline-block h-10 w-10 rounded-full ring-2 ring-[#0a0a0d] object-cover"
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                  alt="Aluno Knockout"
+                  alt="Aluno BBT"
                 />
                 <img
                   className="inline-block h-10 w-10 rounded-full ring-2 ring-[#0a0a0d] object-cover"
                   src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-                  alt="Aluno Knockout"
+                  alt="Aluno BBT"
                 />
                 <img
                   className="inline-block h-10 w-10 rounded-full ring-2 ring-[#0a0a0d] object-cover"
                   src="https://images.unsplash.com/photo-1549476464-37392f717541?auto=format&fit=crop&w=120&q=80"
-                  alt="Aluno Knockout"
+                  alt="Aluno BBT"
                 />
               </div>
 

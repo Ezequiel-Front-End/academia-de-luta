@@ -44,7 +44,7 @@ export function GymImage({ src, alt, className = '', imgClassName = 'object-cove
             {alt}
           </span>
           <span className="text-[10px] text-neutral-500 tracking-wider uppercase mt-1">
-            KNOCKOUT ACADEMY
+            BBT
           </span>
         </div>
       )}

@@ -43,7 +43,7 @@ export function FightersSection({ fighters, onSelectFighter, onViewScheduledFigh
             LUTADORES DA ACADEMIA
           </h2>
           <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
-            Atletas forjados em nosso tatame e ringue. Conheça seus cartéis oficiais, títulos conquistados e as batalhas que eles travam em nome da Knockout Fight Gym.
+            Atletas forjados em nosso tatame e ringue. Conheça seus cartéis oficiais, títulos conquistados e as batalhas que eles travam em nome da BBT.
           </p>
         </div>
 

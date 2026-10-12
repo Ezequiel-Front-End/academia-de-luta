@@ -86,7 +86,7 @@ export function FightDetailModal({ fight, onClose, onCheerFighter }: FightDetail
 
             <div className="grid grid-cols-2 gap-4 sm:gap-8 items-center text-center">
               
-              {/* Knockout Gym Fighter (Left / Red Corner) */}
+              {/* BBT Fighter (Left / Red Corner) */}
               <div className="space-y-3">
                 <div className="relative mx-auto w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-red-600 shadow-lg shadow-red-600/20">
                   <GymImage
@@ -97,7 +97,7 @@ export function FightDetailModal({ fight, onClose, onCheerFighter }: FightDetail
                 </div>
                 <div>
                   <span className="inline-block px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-red-600 text-white rounded">
-                    KNOCKOUT FIGHT GYM
+                    BBT
                   </span>
                   <h4 className="text-sm sm:text-lg font-bold uppercase text-white font-heading mt-1">
                     {fight.fighterName}

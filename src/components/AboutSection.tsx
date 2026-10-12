@@ -5,11 +5,10 @@ import { AnimatedCounter } from './AnimatedCounter';
 
 interface AboutSectionProps {
   onTourGym: () => void;
+  onViewHistory?: () => void;
 }
 
-export function AboutSection({ onTourGym }: AboutSectionProps) {
-  const [showStoryModal, setShowStoryModal] = useState(false);
-
+export function AboutSection({ onTourGym, onViewHistory }: AboutSectionProps) {
   const stats = [
     {
       icon: Award,
@@ -49,7 +48,7 @@ export function AboutSection({ onTourGym }: AboutSectionProps) {
             <div className="lg:col-span-6 relative rounded-2xl overflow-hidden border border-neutral-800 aspect-[16/11] shadow-2xl">
               <GymImage
                 src="/alunos.jpeg"
-                alt="Alunos da Knockout Gym em treinamento"
+                alt="Alunos da BBT em treinamento"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
@@ -72,7 +71,7 @@ export function AboutSection({ onTourGym }: AboutSectionProps) {
               </div>
 
               <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
-                Na Knockout Fight Gym, não apenas ensinamos você a socar, chutar ou finalizar. Nós forjamos caráter, disciplina inquebrável e companheirismo verdadeiro. Nossa missão é desbloquear a sua melhor e mais forte versão.
+                Na BBT, não apenas ensinamos você a socar, chutar ou finalizar. Nós forjamos caráter, disciplina inquebrável e companheirismo verdadeiro. Nossa missão é desbloquear a sua melhor e mais forte versão.
               </p>
 
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
@@ -102,7 +101,7 @@ export function AboutSection({ onTourGym }: AboutSectionProps) {
               {/* Action Buttons */}
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 <button
-                  onClick={() => setShowStoryModal(true)}
+                  onClick={onViewHistory}
                   className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all shadow-lg shadow-red-600/20 flex items-center gap-2 cursor-pointer"
                 >
                   <span>CONHECER NOSSA HISTÓRIA</span>
@@ -124,52 +123,6 @@ export function AboutSection({ onTourGym }: AboutSectionProps) {
 
       </div>
 
-      {/* Story Modal */}
-      {showStoryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-md">
-          <div 
-            className="relative w-full max-w-2xl bg-[#101015] border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden my-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-[#14141c]">
-              <div className="flex items-center gap-2">
-                <HeartHandshake className="w-5 h-5 text-red-500" />
-                <span className="text-xs uppercase tracking-widest text-white font-bold font-heading">
-                  A ORIGEM DA KNOCKOUT FIGHT GYM
-                </span>
-              </div>
-              <button
-                onClick={() => setShowStoryModal(false)}
-                className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-neutral-300 leading-relaxed max-h-[75vh] overflow-y-auto">
-              <p>
-                Em 2014, um grupo de ex-atletas de Boxe e mestres de artes marciais decidiu criar em São Paulo um espaço que resgatasse a verdadeira essência das artes de combate: treinamento sério, sem atalhos, com ambiente de puro respeito e estrutura de nível internacional.
-              </p>
-              <p>
-                O que começou como um espaço com dois sacos de pancada e um tatame modesto tornou-se um dos centros de treinamento de combate mais respeitados da América Latina. Hoje contamos com octógono oficial com medidas do UFC, ringue de boxe regulamentado, área de sacos com mais de 30 pontos e studio completo de preparação física e fisioterapia esportiva.
-              </p>
-              <div className="p-4 bg-[#161622] rounded-xl border border-red-500/20 text-neutral-200">
-                <strong className="text-white block mb-1">Nosso Lema Fundamental:</strong>
-                "Não importa de onde você vem ou quanto peso você quer perder. No momento em que você amarra as bandagens e pisa neste tatame, você é um de nós."
-              </div>
-            </div>
-
-            <div className="px-6 py-4 bg-[#14141c] border-t border-neutral-800 flex justify-end">
-              <button
-                onClick={() => setShowStoryModal(false)}
-                className="px-5 py-2 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-lg cursor-pointer"
-              >
-                Entendido
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

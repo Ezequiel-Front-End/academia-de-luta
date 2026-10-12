@@ -21,7 +21,7 @@ export function VideoModal({ isOpen, onClose, onBookTrial }: VideoModalProps) {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
             <span className="text-xs uppercase tracking-widest text-white font-bold font-heading">
-              KNOCKOUT GYM · HIGHLIGHT REEL & CAMP 2026
+              BBT · HIGHLIGHT REEL & CAMP 2026
             </span>
           </div>
           <button
@@ -38,7 +38,7 @@ export function VideoModal({ isOpen, onClose, onBookTrial }: VideoModalProps) {
           <iframe
             className="absolute inset-0 w-full h-full"
             src="https://www.youtube.com/embed/C4A7HbZYmz0?autoplay=1"
-            title="A Energia do Tatame Knockout"
+            title="A Energia do Tatame BBT"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen

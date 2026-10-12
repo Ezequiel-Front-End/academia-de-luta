@@ -36,10 +36,10 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
           </div>
           <div className="flex flex-col">
             <span className="font-heading text-xl font-bold tracking-wider text-white leading-none">
-              KNOCKOUT
+              BBT
             </span>
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-red-500 leading-tight">
-              FIGHT GYM
+              BRAZILIAN BLACK THAI
             </span>
           </div>
         </a>

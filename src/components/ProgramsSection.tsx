@@ -106,7 +106,7 @@ export function ProgramsSection({ programs, onBookClass }: ProgramsSectionProps)
               <div className="flex items-center gap-2">
                 <Flame className="w-4 h-4 text-red-500" />
                 <span className="text-xs uppercase tracking-widest text-neutral-300 font-bold font-heading">
-                  {selectedProgram.category} · KNOCKOUT GYM
+                  {selectedProgram.category} · BBT
                 </span>
               </div>
               <button

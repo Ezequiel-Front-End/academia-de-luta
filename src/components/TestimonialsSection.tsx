@@ -30,7 +30,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
             Pessoas Reais. Resultados Reais.
           </h2>
           <p className="text-xs sm:text-sm text-neutral-400">
-            Veja o depoimento de quem treina lado a lado com nossos campeões e transformou sua vida na Knockout Gym.
+            Veja o depoimento de quem treina lado a lado com nossos campeões e transformou sua vida na BBT.
           </p>
         </div>
 
