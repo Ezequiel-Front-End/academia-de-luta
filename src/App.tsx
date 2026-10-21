@@ -17,6 +17,10 @@ import { FighterDetailModal } from './components/FighterDetailModal';
 import { FightDetailModal } from './components/FightDetailModal';
 import { VideoModal } from './components/VideoModal';
 import { RevealOnScroll } from './components/RevealOnScroll';
+import { LeeChatbot } from './components/LeeChatbot';
+import { AdminLoginScreen } from './components/admin/AdminLoginScreen';
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 import {
   FIGHTERS_DATA,
@@ -29,12 +33,13 @@ import {
 import { Fighter, ScheduledFight } from './types';
 import { MessageSquare, ArrowUp } from 'lucide-react';
 
-export default function App() {
+function MainAppContent() {
+  const { user } = useAuth();
   const [selectedFighter, setSelectedFighter] = useState<Fighter | null>(null);
   const [selectedFight, setSelectedFight] = useState<ScheduledFight | null>(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('inicio');
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'history'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'history' | 'admin_login' | 'admin_dashboard'>('home');
 
   // Contact form pre-fill state
   const [contactProgram, setContactProgram] = useState<string>('');
@@ -57,8 +62,10 @@ export default function App() {
     scrollToContact();
   };
 
-  const handleBookClass = (programTitle: string) => {
-    setContactProgram(programTitle);
+  const handleBookClass = (programTitle?: string) => {
+    if (programTitle) {
+      setContactProgram(programTitle);
+    }
     scrollToContact();
   };
 
@@ -89,92 +96,132 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Direct trigger when Admin button in Navbar is clicked
+  const handleOpenAdmin = () => {
+    if (user) {
+      setCurrentScreen('admin_dashboard');
+    } else {
+      setCurrentScreen('admin_login');
+    }
+    window.scrollTo(0, 0);
+  };
+
+  // If user is on the Login Screen
+  if (currentScreen === 'admin_login') {
+    return (
+      <AdminLoginScreen
+        onBack={() => {
+          setCurrentScreen('home');
+          window.scrollTo(0, 0);
+        }}
+        onSuccess={() => {
+          setCurrentScreen('admin_dashboard');
+          window.scrollTo(0, 0);
+        }}
+      />
+    );
+  }
+
+  // If user is on the Admin Management Dashboard
+  if (currentScreen === 'admin_dashboard') {
+    return (
+      <AdminDashboard
+        onBackToSite={() => {
+          setCurrentScreen('home');
+          window.scrollTo(0, 0);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#08080a] text-neutral-100 flex flex-col font-sans selection:bg-red-600 selection:text-white">
-
-      <Navbar
-        activeSection={activeNav}
-        onOpenBooking={scrollToContact}
-      />
+      {currentScreen === 'home' && (
+        <Navbar
+          activeSection={activeNav}
+          onOpenBooking={scrollToContact}
+          onOpenAdmin={handleOpenAdmin}
+        />
+      )}
 
       {currentScreen === 'home' ? (
         <main className="flex-1">
-          {/* Hero Section matching the user's reference design */}
-        <HeroSection
-          onStartJourney={handleStartJourney}
-          onWatchVideo={() => setIsVideoModalOpen(true)}
-        />
-
-        {/* Core Requirement 2: Scheduled Fights with Live Countdown & Matchup Showcase */}
-        <RevealOnScroll>
-          <ScheduledFightsSection
-            fights={SCHEDULED_FIGHTS_DATA}
-            onSelectFight={(fight) => setSelectedFight(fight)}
-            onCheerFighter={handleCheerFighter}
+          {/* Hero Section */}
+          <HeroSection
+            onStartJourney={handleStartJourney}
+            onWatchVideo={() => setIsVideoModalOpen(true)}
           />
-        </RevealOnScroll>
 
-        {/* Core Requirement 1: Official Fighters Roster Presentation */}
-        <RevealOnScroll>
-          <FightersSection
-            fighters={FIGHTERS_DATA}
-            onSelectFighter={(fighter) => setSelectedFighter(fighter)}
-            onViewScheduledFight={handleViewScheduledFight}
-          />
-        </RevealOnScroll>
+          {/* Scheduled Fights with Live Countdown */}
+          <RevealOnScroll>
+            <ScheduledFightsSection
+              fights={SCHEDULED_FIGHTS_DATA}
+              onSelectFight={(fight) => setSelectedFight(fight)}
+              onCheerFighter={handleCheerFighter}
+            />
+          </RevealOnScroll>
 
-        {/* Programs / Martial Arts Disciplines Section */}
-        <RevealOnScroll>
-          <ProgramsSection
-            programs={PROGRAMS_DATA}
-            onBookClass={handleBookClass}
-          />
-        </RevealOnScroll>
+          {/* Official Fighters Roster Presentation */}
+          <RevealOnScroll>
+            <FightersSection
+              fighters={FIGHTERS_DATA}
+              onSelectFighter={(fighter) => setSelectedFighter(fighter)}
+              onViewScheduledFight={handleViewScheduledFight}
+            />
+          </RevealOnScroll>
 
-        {/* About Section with 4 Key Counters */}
-        <RevealOnScroll>
-          <AboutSection
-            onTourGym={() => setIsVideoModalOpen(true)}
-            onViewHistory={() => {
-              setCurrentScreen('history');
-              window.scrollTo(0, 0);
-            }}
-          />
-        </RevealOnScroll>
+          {/* Programs / Martial Arts Disciplines Section */}
+          <RevealOnScroll>
+            <ProgramsSection
+              programs={PROGRAMS_DATA}
+              onBookClass={handleBookClass}
+            />
+          </RevealOnScroll>
 
-        {/* Federations and Confederations */}
-        <RevealOnScroll>
-          <FederationsSection />
-        </RevealOnScroll>
+          {/* About Section with 4 Key Counters */}
+          <RevealOnScroll>
+            <AboutSection
+              onTourGym={() => setIsVideoModalOpen(true)}
+              onViewHistory={() => {
+                setCurrentScreen('history');
+                window.scrollTo(0, 0);
+              }}
+            />
+          </RevealOnScroll>
 
-        {/* Partners and Sponsors */}
-        <RevealOnScroll>
-          <PartnersSection />
-        </RevealOnScroll>
+          {/* Federations and Confederations */}
+          <RevealOnScroll>
+            <FederationsSection />
+          </RevealOnScroll>
 
-        {/* Interactive Weekly Class Schedule */}
-        <RevealOnScroll>
-          <ScheduleSection
-            schedule={WEEKLY_SCHEDULE}
-            onBookClassForTime={handleBookClassForTime}
-          />
-        </RevealOnScroll>
+          {/* Partners and Sponsors */}
+          <RevealOnScroll>
+            <PartnersSection />
+          </RevealOnScroll>
 
-        {/* Testimonials & Transformations */}
-        <RevealOnScroll>
-          <TestimonialsSection
-            testimonials={TESTIMONIALS_DATA}
-          />
-        </RevealOnScroll>
+          {/* Interactive Weekly Class Schedule */}
+          <RevealOnScroll>
+            <ScheduleSection
+              schedule={WEEKLY_SCHEDULE}
+              onBookClassForTime={handleBookClassForTime}
+            />
+          </RevealOnScroll>
 
-        {/* Core Requirement 3: Contact Channels & Free Trial Booking Form */}
-        <RevealOnScroll>
-          <ContactSection
-            initialProgram={contactProgram}
-            initialTime={contactTime}
-            cheerFighterName={cheerFighterName}
-          />
-        </RevealOnScroll>
+          {/* Testimonials & Transformations */}
+          <RevealOnScroll>
+            <TestimonialsSection
+              testimonials={TESTIMONIALS_DATA}
+            />
+          </RevealOnScroll>
+
+          {/* Contact Channels & Free Trial Booking Form */}
+          <RevealOnScroll>
+            <ContactSection
+              initialProgram={contactProgram}
+              initialTime={contactTime}
+              cheerFighterName={cheerFighterName}
+            />
+          </RevealOnScroll>
         </main>
       ) : (
         <main className="flex-1">
@@ -227,8 +274,11 @@ export default function App() {
         </aside>
       )}
 
-      {/* Floating Action Button: Quick WhatsApp Direct Access */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
+      {/* Floating Action Buttons: Lee Chatbot & Quick WhatsApp Direct Access */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-3">
+        {/* Lee Chatbot Button - Positioned directly above the WhatsApp button */}
+        <LeeChatbot onOpenBooking={handleBookClass} />
+
         <a
           href={`https://wa.me/${GYM_INFO.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre as aulas e planos da BBT!')}`}
           target="_blank"
@@ -252,5 +302,13 @@ export default function App() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainAppContent />
+    </AuthProvider>
   );
 }

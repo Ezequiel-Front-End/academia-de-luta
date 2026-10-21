@@ -37,7 +37,7 @@ export function HeroSection({ onStartJourney, onWatchVideo }: HeroSectionProps) 
   ];
 
   return (
-    <section id="inicio" className="relative pt-16 pb-16 lg:pt-20 lg:pb-24 overflow-hidden border-b border-white/5">
+    <section id="inicio" className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden border-b border-white/5">
       {/* Background Image & Overlay */}
       <div 
         className="absolute inset-0 z-0"

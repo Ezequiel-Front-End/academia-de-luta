@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Calendar, MapPin, Tv, Flame, Trophy, Swords, ArrowRight, Clock, ExternalLink } from 'lucide-react';
 import { ScheduledFight } from '../types';
 import { GymImage } from './GymImage';
@@ -11,9 +11,42 @@ interface ScheduledFightsSectionProps {
 
 export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }: ScheduledFightsSectionProps) {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'recent'>('upcoming');
+  const kaahVideoRef = useRef<HTMLVideoElement | null>(null);
 
   // Next marquee fight (first one)
   const nextFight = fights[0];
+
+  // Observador de scroll para disparar o vídeo como um GIF e congelar no fim
+  useEffect(() => {
+    const videoElement = kaahVideoRef.current;
+    if (!videoElement) return;
+
+    videoElement.muted = true;
+    videoElement.defaultMuted = true;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            videoElement.currentTime = 0;
+            const playPromise = videoElement.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(() => {});
+            }
+          } else {
+            videoElement.pause();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(videoElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   // Countdown timer calculation
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({
@@ -90,7 +123,7 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-600/10 blur-[150px] pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <div className="inline-flex items-center gap-2">
@@ -112,21 +145,19 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
           <div className="inline-flex p-1 bg-[#121218] rounded-xl border border-neutral-800">
             <button
               onClick={() => setActiveTab('upcoming')}
-              className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                activeTab === 'upcoming'
-                  ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
-                  : 'text-neutral-400 hover:text-white'
-              }`}
+              className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${activeTab === 'upcoming'
+                ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                : 'text-neutral-400 hover:text-white'
+                }`}
             >
               Próximos Combates ({fights.length})
             </button>
             <button
               onClick={() => setActiveTab('recent')}
-              className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                activeTab === 'recent'
-                  ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
-                  : 'text-neutral-400 hover:text-white'
-              }`}
+              className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${activeTab === 'recent'
+                ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                : 'text-neutral-400 hover:text-white'
+                }`}
             >
               Últimas Vitórias & Resultados ({recentVictories.length})
             </button>
@@ -135,11 +166,11 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
 
         {activeTab === 'upcoming' ? (
           <div className="space-y-12">
-            
+
             {/* NEXT MAIN EVENT HIGHLIGHT BANNER */}
             {nextFight && (
               <div className="relative rounded-3xl bg-gradient-to-br from-[#15151e] via-[#111116] to-[#0d0d12] border-2 border-red-600/40 p-6 sm:p-10 shadow-2xl overflow-hidden">
-                
+
                 {/* Top Badge Strip */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-neutral-800">
                   <div className="flex items-center gap-3">
@@ -162,14 +193,18 @@ export function ScheduledFightsSection({ fights, onSelectFight, onCheerFighter }
 
                 {/* Matchup Center Stage */}
                 <div className="pt-12 lg:pt-20 pb-6 flex flex-col lg:flex-row items-center lg:items-end justify-center gap-8 lg:gap-16">
-                  
+
                   {/* Left: BBT Athlete */}
                   <div className="flex flex-col items-center text-center flex-1 min-w-0 px-2">
-                    <div className="relative w-48 h-64 sm:w-64 sm:h-80 lg:w-[24rem] lg:h-[25rem] shrink-0 -mb-6 lg:-mb-12 max-w-full z-10">
-                      <img
-                        src="/modelo_lutador_kaah.png"
-                        alt={nextFight.fighterName}
-                        className="w-full h-full object-contain object-bottom drop-shadow-2xl [mask-image:linear-gradient(to_top,transparent_3%,black_35%)] scale-x-[-1.5] scale-y-[1.5] sm:scale-x-[-1.7] sm:scale-y-[1.7] lg:scale-x-[-1.95] lg:scale-y-[1.95] translate-y-6 lg:translate-y-10 origin-bottom"
+                    <div className="relative w-56 h-72 sm:w-72 sm:h-96 lg:w-[28rem] lg:h-[32rem] shrink-0 -mb-8 lg:-mb-14 max-w-full z-10 flex items-end justify-center">
+                      <video
+                        ref={kaahVideoRef}
+                        src="/video_kauany_painel_de_luta.mp4"
+                        poster="/modelo_lutador_kaah.png"
+                        muted
+                        playsInline
+                        preload="auto"
+                        className="w-full h-full object-contain object-bottom drop-shadow-2xl mix-blend-screen contrast-[1.08] brightness-[1.04] [mask-image:linear-gradient(to_top,transparent_1%,black_18%,black_92%,transparent_100%)] scale-x-[-1.8] scale-y-[1.8] sm:scale-x-[-2.1] sm:scale-y-[2.1] lg:scale-x-[-2.45] lg:scale-y-[2.45] translate-y-8 lg:translate-y-12 origin-bottom pointer-events-none"
                       />
                     </div>
                     <div className="z-10 relative w-full break-words">

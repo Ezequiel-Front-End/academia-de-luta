@@ -1,13 +1,25 @@
-import { useState } from 'react';
-import { Menu, X, Flame } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X, Flame, ShieldAlert, Lock } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBooking: () => void;
   activeSection: string;
+  onOpenAdmin?: () => void;
 }
 
-export function Navbar({ onOpenBooking }: NavbarProps) {
+export function Navbar({ onOpenBooking, onOpenAdmin }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { label: 'Início', href: '#inicio' },
@@ -24,8 +36,18 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0a0a0d]/90 backdrop-blur-md border-b border-white/10 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <header 
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? 'bg-[#0a0a0d]/90 backdrop-blur-md border-b border-white/10 shadow-xl shadow-black/50 py-0'
+          : 'bg-transparent border-b border-transparent py-2 sm:py-3'
+      }`}
+    >
+      <div 
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300 ease-in-out ${
+          isScrolled ? 'h-16' : 'h-24'
+        }`}
+      >
         {/* Zone 1: Brand Wordmark */}
         <a 
           href="#inicio" 
@@ -57,11 +79,20 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
           ))}
         </nav>
 
-        {/* Zone 3: Primary Action */}
+        {/* Zone 3: Primary Action & Admin */}
         <div className="hidden sm:flex items-center gap-3">
           <button
+            onClick={onOpenAdmin}
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold uppercase tracking-wider text-neutral-300 hover:text-white bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700/60 hover:border-red-500/50 rounded transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 group cursor-pointer"
+            title="Acesso Administrativo"
+          >
+            <Lock className="w-3.5 h-3.5 text-red-500 group-hover:scale-110 transition-transform" />
+            <span>Admin</span>
+          </button>
+
+          <button
             onClick={onOpenBooking}
-            className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 active:bg-red-800 rounded transition-all shadow-lg shadow-red-600/20 hover:shadow-red-600/40 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 active:bg-red-800 rounded transition-all shadow-lg shadow-red-600/20 hover:shadow-red-600/40 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 cursor-pointer"
           >
             TREINE CONOSCO
           </button>
@@ -95,7 +126,18 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
             ))}
           </nav>
 
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAdmin?.();
+              }}
+              className="w-full py-2.5 px-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider text-neutral-200 bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700 rounded transition-colors"
+            >
+              <Lock className="w-4 h-4 text-red-500" />
+              <span>Painel Admin</span>
+            </button>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
