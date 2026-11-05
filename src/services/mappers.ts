@@ -1,5 +1,5 @@
-import { Fighter, ScheduledFight, Program, ClassScheduleItem } from '../types';
-import { Lutador, LutaAgendada, ModalidadeTreino, GradeHorarioTreino } from '../types/database';
+import { Fighter, ScheduledFight, Program, ClassScheduleItem, Testimonial } from '../types';
+import { Lutador, LutaAgendada, ModalidadeTreino, GradeHorarioTreino, DepoimentoAluno } from '../types/database';
 
 // Converte Fighter para o modelo Lutador em Português
 export function mapFighterToLutador(f: Fighter): Lutador {
@@ -159,6 +159,24 @@ export function mapProgramToModalidade(p: Program): ModalidadeTreino {
     equipamentos_necessarios: p.equipmentRequired,
     imagem: p.image,
     treinador: p.coach,
+    ativo: true,
+  };
+}
+
+// Converte ModalidadeTreino para Program
+export function mapModalidadeToProgram(m: ModalidadeTreino): Program {
+  return {
+    id: m.id,
+    title: m.titulo,
+    subtitle: m.subtitulo,
+    category: m.categoria,
+    description: m.descricao,
+    benefits: m.beneficios || [],
+    scheduleOverview: m.resumo_horarios || '',
+    intensity: m.intensidade || 'Alta',
+    equipmentRequired: m.equipamentos_necessarios || [],
+    image: m.imagem || 'https://images.unsplash.com/photo-1549476464-37392f717541?auto=format&fit=crop&w=800&q=80',
+    coach: m.treinador || 'Instrutor BBT',
   };
 }
 
@@ -172,5 +190,45 @@ export function mapScheduleItemToGrade(cs: ClassScheduleItem): GradeHorarioTrein
     nivel: cs.level,
     treinador: cs.coach,
     sala: cs.room,
+  };
+}
+
+// Converte GradeHorarioTreino do banco para ClassScheduleItem da interface
+export function mapGradeToScheduleItem(g: GradeHorarioTreino): ClassScheduleItem {
+  return {
+    id: g.id,
+    day: g.dia_semana,
+    time: g.horario,
+    program: g.modalidade,
+    level: g.nivel,
+    coach: g.treinador,
+    room: g.sala,
+  };
+}
+
+// Converte DepoimentoAluno do Firestore para Testimonial da UI
+export function mapDepoimentoToTestimonial(d: DepoimentoAluno): Testimonial {
+  return {
+    id: d.id,
+    name: d.nome,
+    role: d.cargo_modalidade,
+    avatar: d.foto,
+    text: d.depoimento,
+    rating: d.avaliacao,
+    highlight: d.destaque,
+  };
+}
+
+// Converte Testimonial da UI para DepoimentoAluno do Firestore
+export function mapTestimonialToDepoimento(t: Testimonial): DepoimentoAluno {
+  return {
+    id: t.id,
+    nome: t.name,
+    cargo_modalidade: t.role,
+    destaque: t.highlight,
+    depoimento: t.text,
+    avaliacao: t.rating,
+    foto: t.avatar,
+    ativo: true,
   };
 }

@@ -6,6 +6,7 @@ interface ContactSectionProps {
   initialProgram?: string;
   initialTime?: string;
   cheerFighterName?: string;
+  availablePrograms?: string[];
 }
 
 function CustomSelect({ value, options, onChange, placeholder }: any) {
@@ -53,7 +54,7 @@ function CustomSelect({ value, options, onChange, placeholder }: any) {
   );
 }
 
-export function ContactSection({ initialProgram, initialTime, cheerFighterName }: ContactSectionProps) {
+export function ContactSection({ initialProgram, initialTime, cheerFighterName, availablePrograms }: ContactSectionProps) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -68,14 +69,16 @@ export function ContactSection({ initialProgram, initialTime, cheerFighterName }
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const programsList = [
-    'Boxe Olímpico & Profissional',
-    'Muay Thai Tradicional',
-    'MMA (Artes Marciais Mistas)',
-    'Brazilian Jiu-Jitsu (BJJ)',
-    'Preparação Física & Conditioning',
-    'Boxe Feminino & Iniciantes',
-  ];
+  const programsList = (availablePrograms && availablePrograms.length > 0)
+    ? availablePrograms
+    : [
+        'Boxe Olímpico & Profissional',
+        'Muay Thai Tradicional',
+        'MMA (Artes Marciais Mistas)',
+        'Brazilian Jiu-Jitsu (BJJ)',
+        'Preparação Física & Conditioning',
+        'Boxe Feminino & Turmas Iniciantes',
+      ];
 
   const levelsList = [
     'Iniciante (Nunca treinei)',

@@ -16,6 +16,10 @@ import {
   ChevronRight,
   Maximize2,
   Minimize2,
+  Volume2,
+  VolumeX,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import { GYM_INFO, PROGRAMS_DATA } from '../data/gymData';
 
@@ -42,9 +46,17 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
   const [hasUnread, setHasUnread] = useState(false);
   const [showWelcomeTooltip, setShowWelcomeTooltip] = useState(true);
 
-  // Video state inside modal
+  // Video player & presentation state
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
   const [showVideo, setShowVideo] = useState(true);
+  const [isVideoCollapsed, setIsVideoCollapsed] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(10);
+  const [showCaptions, setShowCaptions] = useState(true);
+  const [hasVideoError, setHasVideoError] = useState(false);
+  const [showControls, setShowControls] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   // Chat message state
@@ -70,7 +82,10 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
       setHasUnread(false);
       setShowWelcomeTooltip(false);
       if (videoRef.current) {
-        videoRef.current.play().catch(() => {
+        videoRef.current.muted = isMuted;
+        videoRef.current.play().then(() => {
+          setIsVideoPlaying(true);
+        }).catch(() => {
           // Autoplay policy handled gracefully
         });
       }
@@ -89,11 +104,11 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
     return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const handleTogglePlay = () => {
+  const handleTogglePlay = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (videoRef.current) {
       if (videoRef.current.paused) {
-        videoRef.current.play();
-        setIsVideoPlaying(true);
+        videoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => {});
       } else {
         videoRef.current.pause();
         setIsVideoPlaying(false);
@@ -101,11 +116,62 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
     }
   };
 
-  const handleRestartVideo = () => {
+  const handleToggleMute = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (videoRef.current) {
+      const nextMuted = !videoRef.current.muted;
+      videoRef.current.muted = nextMuted;
+      setIsMuted(nextMuted);
+      if (!nextMuted && videoRef.current.paused) {
+        videoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+      }
+    }
+  };
+
+  const handleRestartVideo = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play();
-      setIsVideoPlaying(true);
+      videoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+    }
+  };
+
+  const handleReplayVideo = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setIsVideoCollapsed(false);
+    setShowVideo(true);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = false;
+      setIsMuted(false);
+      videoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+    }
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+    if (videoRef.current && videoDuration > 0) {
+      videoRef.current.currentTime = percentage * videoDuration;
+      setVideoCurrentTime(videoRef.current.currentTime);
+    }
+  };
+
+  const formatVideoTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  const getSubtitleForTime = (time: number): string => {
+    if (time < 3.2) {
+      return '🥊 Fala, guerreiro! Eu sou o Lee, assistente virtual da BBT!';
+    } else if (time < 6.8) {
+      return '⚡ Conheça nossa estrutura de alta performance e modalidades de elite!';
+    } else {
+      return '🔥 Escolha seu treino ou agende sua aula experimental gratuita agora!';
     }
   };
 
@@ -288,6 +354,35 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
                 action: () => {
                   window.open(`tel:${GYM_INFO.phone.replace(/\D/g, '')}`, '_self');
                 },
+              },
+              {
+                label: '↩️ Voltar ao menu',
+                action: () => handleResetToMenu(),
+              },
+            ],
+          };
+          break;
+
+        case 'Rever apresentação do Lee':
+        case '🎬 Assistir vídeo de apresentação':
+        case '🎬 Rever vídeo de apresentação':
+        case 'Assistir vídeo do Lee':
+          handleReplayVideo();
+          botResponse = {
+            id: (Date.now() + 1).toString(),
+            sender: 'bot',
+            text: `Dá uma olhada no vídeo logo acima! 🥊 Reativei a apresentação oficial para você conferir a estrutura da **BBT**, nossos atletas e metodologia de treino!\n\n` +
+              `Você pode controlar o som, avançar na linha do tempo ou usar legendas a qualquer momento. O que achou?`,
+            timestamp: getCurrentTime(),
+            actionButtons: [
+              {
+                label: '🥋 Conhecer as modalidades',
+                action: () => handleQuickOption('Conhecer as modalidades'),
+                primary: true,
+              },
+              {
+                label: '🔥 Agendar aula experimental gratuita',
+                action: () => handleQuickOption('Agendar aula experimental'),
               },
               {
                 label: '↩️ Voltar ao menu',
@@ -494,9 +589,9 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
             <div className="flex items-start gap-2.5">
               <div className="relative shrink-0">
                 <img
-                  src="/lee-robot.png"
+                  src="/lee-robot.png?v=5"
                   alt="Lee Avatar"
-                  className="w-10 h-10 rounded-full object-cover border border-orange-500"
+                  className="w-10 h-10 rounded-full object-cover border border-red-500"
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-[#14151c]" />
               </div>
@@ -520,7 +615,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
               </div>
             </div>
             {/* Arrow pointer */}
-            <div className="absolute right-[-6px] bottom-4 w-3 h-3 bg-[#14151c] border-t border-r border-orange-500/40 rotate-45" />
+            <div className="absolute right-[-6px] bottom-4 w-3 h-3 bg-[#14151c] border-t border-r border-red-500/40 rotate-45" />
           </div>
         )}
 
@@ -533,8 +628,8 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
           }}
           className={`w-13 h-13 rounded-full relative flex items-center justify-center shadow-xl transition-all duration-300 cursor-pointer active:scale-95 group ${
             isOpen
-              ? 'bg-[#181824] border-2 border-orange-500 text-white shadow-orange-950/70 scale-105'
-              : 'bg-[#121218] hover:bg-[#1a1a24] border-2 border-orange-500/80 hover:border-orange-500 shadow-orange-950/50 hover:scale-108'
+              ? 'bg-[#181824] border-2 border-red-500 text-white shadow-red-950/70 scale-105'
+              : 'bg-[#121218] hover:bg-[#1a1a24] border-2 border-red-500/80 hover:border-red-500 shadow-red-950/50 hover:scale-108'
           }`}
           aria-label={isOpen ? 'Fechar chat com Lee' : 'Abrir chat com Lee - Assistente BBT'}
           title="Falar com Lee — Assistente Virtual BBT"
@@ -542,7 +637,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
           {/* Avatar image of the robot */}
           <div className="relative w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
             <img
-              src="/lee-robot.png"
+              src="/lee-robot.png?v=5"
               alt="Lee - Robô BBT"
               className="w-full h-full object-cover rounded-full"
             />
@@ -552,7 +647,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
           <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#121218] rounded-full animate-pulse" />
 
           {/* Glowing pulse ring */}
-          <span className="absolute -inset-1 rounded-full border border-orange-500/30 animate-ping pointer-events-none" />
+          <span className="absolute -inset-1 rounded-full border border-red-500/30 animate-ping pointer-events-none" />
         </button>
       </div>
 
@@ -564,7 +659,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
           className={`fixed z-50 transition-all duration-300 ease-out flex flex-col shadow-2xl rounded-2xl overflow-hidden border border-neutral-300/80 ${
             isMinimized
               ? 'bottom-24 right-4 sm:right-6 w-80 bg-[#14151d] border-orange-500/40'
-              : 'bottom-20 sm:bottom-24 right-2 sm:right-6 w-[calc(100vw-16px)] sm:w-[410px] md:w-[430px] h-[610px] max-h-[85vh] bg-[#F8F8F8]'
+              : 'bottom-20 sm:bottom-24 right-2 sm:right-6 w-[calc(100vw-16px)] sm:w-[410px] md:w-[430px] h-[610px] max-h-[85vh] bg-[#FFFFFF]'
           }`}
         >
           {/* Header (Dark, exactly matching user mockup) */}
@@ -572,7 +667,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <img
-                  src="/lee-robot.png"
+                  src="/lee-robot.png?v=7"
                   alt="Lee Avatar"
                   className="w-10 h-10 rounded-full object-cover border border-neutral-600 bg-neutral-900"
                 />
@@ -622,23 +717,24 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
             </div>
           ) : (
             <>
-              {/* Chat Scrollable Area - #F8F8F8 background matching the video */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F8F8F8]">
-                {/* 1. Presentation Video from Lee - Seamlessly on #F8F8F8 without box or cutoff line */}
+              {/* Chat Scrollable Area - #FFFFFF background matching the white video */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FFFFFF]">
+                {/* 1. Presentation Video from Lee - Seamlessly on #FFFFFF without box, shadow, borders, buttons, or subtitles */}
                 {showVideo && (
-                  <div className="flex flex-col items-center justify-center pt-0 pb-0 relative">
-                    <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-video flex items-center justify-center bg-[#F8F8F8] overflow-hidden">
+                  <div className="flex flex-col items-center justify-center pt-0 pb-0 relative w-full bg-[#FFFFFF]">
+                    <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-video flex items-center justify-center bg-[#FFFFFF] overflow-hidden">
                       <video
                         ref={videoRef}
-                        src="/apresentacao_lee_robo.mp4?v=4"
-                        poster="/lee-robot.png"
+                        src="/apresentacao_lee_robo.mp4?v=20261102-white"
+                        poster="/lee-robot.png?v=7"
                         playsInline
-                        muted
+                        muted={isMuted}
                         autoPlay
                         loop
+                        preload="auto"
                         onPlay={() => setIsVideoPlaying(true)}
                         onPause={() => setIsVideoPlaying(false)}
-                        className="w-full h-full object-cover cursor-pointer bg-[#F8F8F8]"
+                        className="w-full h-full object-cover cursor-pointer bg-[#FFFFFF]"
                         onClick={handleTogglePlay}
                         title="Clique para reproduzir / pausar"
                       />
@@ -646,8 +742,8 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
                   </div>
                 )}
 
-                {/* 2. Welcome Card (Matching user mockup layout) */}
-                <div className="bg-white rounded-3xl p-5 shadow-xs border border-neutral-200/50 text-neutral-800 animate-fade-in mt-1">
+                {/* 2. Welcome Card on #FFFFFF */}
+                <div className="bg-[#FFFFFF] rounded-3xl p-5 shadow-xs border border-neutral-200/90 text-neutral-800 animate-fade-in mt-1">
                   <h4 className="font-bold text-neutral-900 text-base leading-snug">
                     Fala! 🥊 Eu sou o Lee!
                   </h4>
@@ -659,7 +755,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
                   </p>
                 </div>
 
-                {/* 3. Quick Option Pills (The 5 items from user screenshot) */}
+                {/* 3. Quick Option Pills */}
                 <div className="flex flex-col gap-2 pt-1">
                   {[
                     { label: '🥋 Conhecer as modalidades', value: 'Conhecer as modalidades' },
@@ -671,7 +767,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
                     <button
                       key={opt.value}
                       onClick={() => handleQuickOption(opt.value)}
-                      className="w-full bg-white hover:bg-neutral-50 active:bg-neutral-100 border border-neutral-200 text-neutral-800 rounded-full px-5 py-3 text-sm font-medium text-left shadow-xs hover:shadow-sm hover:border-orange-500/40 transition-all flex items-center justify-between group cursor-pointer"
+                      className="w-full bg-[#FFFFFF] hover:bg-neutral-50 active:bg-neutral-100 border border-neutral-200 text-neutral-800 rounded-full px-5 py-3 text-sm font-medium text-left shadow-xs hover:shadow-sm hover:border-orange-500/40 transition-all flex items-center justify-between group cursor-pointer"
                     >
                       <span>{opt.label}</span>
                       <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-orange-500 group-hover:translate-x-0.5 transition-all" />
@@ -691,7 +787,7 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
                       className={`max-w-[85%] rounded-2xl p-3.5 text-sm shadow-xs ${
                         msg.sender === 'user'
                           ? 'bg-[#14151a] text-white rounded-br-xs'
-                          : 'bg-white text-neutral-800 border border-neutral-200/90 rounded-bl-xs'
+                          : 'bg-[#FFFFFF] text-neutral-800 border border-neutral-200 shadow-xs rounded-bl-xs'
                       }`}
                     >
                       <div className="whitespace-pre-line leading-relaxed">
@@ -734,9 +830,9 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
 
                 {/* Typing Indicator */}
                 {isTyping && (
-                  <div className="flex items-center gap-2 bg-white border border-neutral-200 px-3.5 py-2.5 rounded-2xl rounded-bl-xs w-fit shadow-xs">
+                  <div className="flex items-center gap-2 bg-[#FFFFFF] border border-neutral-200 px-3.5 py-2.5 rounded-2xl rounded-bl-xs w-fit shadow-xs">
                     <img
-                      src="/lee-robot.png"
+                      src="/lee-robot.png?v=7"
                       alt="Lee"
                       className="w-4 h-4 rounded-full object-cover"
                     />
@@ -752,15 +848,15 @@ export function LeeChatbot({ onOpenBooking }: LeeChatbotProps) {
                 <div ref={chatBottomRef} />
               </div>
 
-              {/* 5. Bottom Input Area (White pill with orange send icon from mockup) */}
-              <div className="p-3 bg-[#F8F8F8] border-t border-neutral-200/50 shrink-0">
+              {/* 5. Bottom Input Area on pure white #FFFFFF */}
+              <div className="p-3 bg-[#FFFFFF] border-t border-neutral-200/80 shrink-0">
                 <form onSubmit={handleSendMessage} className="relative flex items-center">
                   <input
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Digite sua mensagem..."
-                    className="w-full bg-white text-neutral-800 placeholder-neutral-400 text-sm rounded-full pl-4 pr-12 py-3 border border-neutral-300 focus:outline-none focus:border-orange-500 transition-all shadow-inner"
+                    className="w-full bg-[#f8f8fa] text-neutral-800 placeholder-neutral-400 text-sm rounded-full pl-4 pr-12 py-3 border border-neutral-200 focus:outline-none focus:border-orange-500 focus:bg-white transition-all shadow-inner"
                   />
                   <button
                     type="submit"

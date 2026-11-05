@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -21,16 +21,33 @@ import { LeeChatbot } from './components/LeeChatbot';
 import { AdminLoginScreen } from './components/admin/AdminLoginScreen';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { subscribeToSchedules } from './services/scheduleService';
+import { subscribeToTestimonials } from './services/testimonialService';
+import { subscribeToFederations } from './services/federationService';
+import { subscribeToPartners } from './services/partnerService';
+import { subscribeToModalities } from './services/modalityService';
+import { subscribeToScheduledFights } from './services/fightService';
+import {
+  mapGradeToScheduleItem,
+  mapDepoimentoToTestimonial,
+  mapModalidadeToProgram,
+  mapLutaAgendadaToScheduledFight,
+} from './services/mappers';
+import {
+  FederacaoEntidade,
+  ParceiroPatrocinador,
+  ModalidadeTreino,
+  LutaAgendada,
+} from './types/database';
 
 import {
   FIGHTERS_DATA,
   SCHEDULED_FIGHTS_DATA,
   PROGRAMS_DATA,
   WEEKLY_SCHEDULE,
-  TESTIMONIALS_DATA,
   GYM_INFO,
 } from './data/gymData';
-import { Fighter, ScheduledFight } from './types';
+import { Fighter, ScheduledFight, ClassScheduleItem, Testimonial } from './types';
 import { MessageSquare, ArrowUp } from 'lucide-react';
 
 function MainAppContent() {
@@ -40,6 +57,78 @@ function MainAppContent() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('inicio');
   const [currentScreen, setCurrentScreen] = useState<'home' | 'history' | 'admin_login' | 'admin_dashboard'>('home');
+
+  // Real-time schedules from Firebase Firestore (consumo exclusivo do Firebase)
+  const [schedules, setSchedules] = useState<ClassScheduleItem[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToSchedules((items) => {
+      setSchedules(items ? items.map(mapGradeToScheduleItem) : []);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time testimonials from Firebase Firestore (consumo exclusivo do Firebase)
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTestimonials((items) => {
+      setTestimonials(items ? items.map(mapDepoimentoToTestimonial) : []);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time federations from Firebase Firestore (consumo exclusivo do Firebase)
+  const [federations, setFederations] = useState<FederacaoEntidade[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToFederations((items) => {
+      setFederations(items || []);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time partners from Firebase Firestore (consumo exclusivo do Firebase)
+  const [partners, setPartners] = useState<ParceiroPatrocinador[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToPartners((items) => {
+      setPartners(items || []);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time modalities from Firebase Firestore (consumo exclusivo do Firebase)
+  const [modalities, setModalities] = useState<ModalidadeTreino[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToModalities((items) => {
+      setModalities(items || []);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const dynamicPrograms = modalities.length > 0
+    ? modalities.map(mapModalidadeToProgram)
+    : PROGRAMS_DATA;
+
+  const dynamicModalityTitles = modalities.length > 0
+    ? modalities.map((m) => m.titulo)
+    : undefined;
+
+  // Real-time scheduled fights from Firebase Firestore (consumo exclusivo do Firebase)
+  const [scheduledFights, setScheduledFights] = useState<ScheduledFight[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToScheduledFights((items) => {
+      setScheduledFights(items && items.length > 0 ? items.map(mapLutaAgendadaToScheduledFight) : []);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const dynamicFights = scheduledFights.length > 0
+    ? scheduledFights
+    : SCHEDULED_FIGHTS_DATA;
 
   // Contact form pre-fill state
   const [contactProgram, setContactProgram] = useState<string>('');
@@ -76,7 +165,7 @@ function MainAppContent() {
   };
 
   const handleViewScheduledFight = (fightId: string) => {
-    const fight = SCHEDULED_FIGHTS_DATA.find((f) => f.id === fightId);
+    const fight = dynamicFights.find((f) => f.id === fightId);
     if (fight) {
       setSelectedFight(fight);
     } else {
@@ -155,7 +244,7 @@ function MainAppContent() {
           {/* Scheduled Fights with Live Countdown */}
           <RevealOnScroll>
             <ScheduledFightsSection
-              fights={SCHEDULED_FIGHTS_DATA}
+              fights={dynamicFights}
               onSelectFight={(fight) => setSelectedFight(fight)}
               onCheerFighter={handleCheerFighter}
             />
@@ -173,7 +262,7 @@ function MainAppContent() {
           {/* Programs / Martial Arts Disciplines Section */}
           <RevealOnScroll>
             <ProgramsSection
-              programs={PROGRAMS_DATA}
+              programs={dynamicPrograms}
               onBookClass={handleBookClass}
             />
           </RevealOnScroll>
@@ -191,18 +280,18 @@ function MainAppContent() {
 
           {/* Federations and Confederations */}
           <RevealOnScroll>
-            <FederationsSection />
+            <FederationsSection federations={federations} />
           </RevealOnScroll>
 
           {/* Partners and Sponsors */}
           <RevealOnScroll>
-            <PartnersSection />
+            <PartnersSection partners={partners} />
           </RevealOnScroll>
 
           {/* Interactive Weekly Class Schedule */}
           <RevealOnScroll>
             <ScheduleSection
-              schedule={WEEKLY_SCHEDULE}
+              schedule={schedules}
               onBookClassForTime={handleBookClassForTime}
             />
           </RevealOnScroll>
@@ -210,7 +299,7 @@ function MainAppContent() {
           {/* Testimonials & Transformations */}
           <RevealOnScroll>
             <TestimonialsSection
-              testimonials={TESTIMONIALS_DATA}
+              testimonials={testimonials}
             />
           </RevealOnScroll>
 
@@ -220,6 +309,7 @@ function MainAppContent() {
               initialProgram={contactProgram}
               initialTime={contactTime}
               cheerFighterName={cheerFighterName}
+              availablePrograms={dynamicModalityTitles}
             />
           </RevealOnScroll>
         </main>

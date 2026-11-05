@@ -25,7 +25,7 @@ export function ScheduleSection({ schedule, onBookClassForTime }: ScheduleSectio
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <div className="inline-flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-red-600" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-red-500 font-heading">
               GRADE DE HORÁRIOS SEMANAIS
             </span>

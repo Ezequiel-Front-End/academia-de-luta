@@ -68,6 +68,10 @@ export interface LutaAgendada {
   link_ingressos?: string;
   status: 'Confirmada' | 'Card Principal' | 'Disputa de Título' | 'Card Preliminar';
   observacoes: string;
+  ordem?: number;
+  ativo?: boolean;
+  criado_em?: string;
+  atualizado_em?: string;
 }
 
 export interface ModalidadeTreino {
@@ -82,6 +86,10 @@ export interface ModalidadeTreino {
   equipamentos_necessarios: string[];
   imagem: string;
   treinador: string;
+  ordem?: number;
+  ativo?: boolean;
+  criado_em?: string;
+  atualizado_em?: string;
 }
 
 export interface GradeHorarioTreino {
@@ -107,4 +115,46 @@ export interface InformacoesAcademia {
   horarios_semana: string;
   horarios_sabado: string;
   horarios_domingo: string;
+}
+
+export interface DepoimentoAluno {
+  id: string;
+  nome: string;
+  cargo_modalidade: string;
+  destaque: string;
+  depoimento: string;
+  avaliacao: number;
+  foto: string;
+  ativo: boolean;
+  ordem?: number;
+  criado_em?: string;
+  atualizado_em?: string;
+}
+
+export interface FederacaoEntidade {
+  id: string;
+  nome: string;
+  nome_completo: string;
+  logo: string;
+  descricao: string;
+  link: string;
+  cor_tema?: 'vermelho' | 'azul' | 'verde' | 'neutro' | string;
+  ativo: boolean;
+  ordem?: number;
+  criado_em?: string;
+  atualizado_em?: string;
+}
+
+export interface ParceiroPatrocinador {
+  id: string;
+  nome: string;
+  nome_completo: string;
+  logo: string;
+  descricao: string;
+  link: string;
+  cor_tema?: 'neutro' | 'vermelho' | 'dourado' | 'azul' | string;
+  ativo: boolean;
+  ordem?: number;
+  criado_em?: string;
+  atualizado_em?: string;
 }
